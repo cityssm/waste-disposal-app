@@ -1,0 +1,10 @@
+import type * as configTypes from "../types/configTypes";
+export declare function getProperty(propertyName: "application.applicationName"): string;
+export declare function getProperty(propertyName: "application.httpPort"): number;
+export declare function getProperty(propertyName: "application.https"): configTypes.Config_HTTPS;
+export declare function getProperty(propertyName: "reverseProxy.disableCompression"): boolean;
+export declare function getProperty(propertyName: "reverseProxy.disableEtag"): boolean;
+export declare function getProperty(propertyName: "reverseProxy.blockViaXForwardedFor"): boolean;
+export declare function getProperty(propertyName: "reverseProxy.urlPrefix"): "";
+export declare function getProperty(propertyName: "wasteDisposalData.remoteRootFolder"): string;
+export declare function getProperty(propertyName: "itemImages"): configTypes.Config_ItemImages;
