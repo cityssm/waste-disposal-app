@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getRelatedItemsByItemKey = exports.getItemReusesByItemKey = exports.getItemLocationsByItemKey = exports.getLocationByLocationKey = exports.getItemByItemKey = exports.refreshAll = void 0;
+exports.getRelatedItemsByItemKey = exports.getItemReusesByItemKey = exports.getItemLocationsByItemKey = exports.getLocationByLocationKey = exports.getItemByItemKey = exports.getItems = exports.refreshAll = void 0;
 const path = require("path");
 const node_fetch_1 = require("node-fetch");
 const Papa = require("papaparse");
@@ -8,6 +8,7 @@ const configFns = require("./configFns");
 const debug = require("debug");
 const log = debug("waste-disposal-app:itemDataCache");
 const itemImages = configFns.getProperty("itemImages");
+let data_items_sorted = [];
 let data_items_byItemKey = new Map();
 let data_itemLocations_byItemKey = new Map();
 let data_relatedItems_byItemKey = new Map();
@@ -19,9 +20,21 @@ const loadData_items = (rows) => {
         if (itemImages.hasOwnProperty(row.itemKey)) {
             row.itemImage = itemImages[row.itemKey];
         }
+        row.searchTerms = (row.searchTerms || "").toLowerCase();
         items.set(row.itemKey, row);
     }
     data_items_byItemKey = items;
+    data_items_sorted = rows.sort((itemA, itemB) => {
+        const itemNameA = itemA.itemName.toLowerCase();
+        const itemNameB = itemB.itemName.toLowerCase();
+        if (itemNameA < itemNameB) {
+            return -1;
+        }
+        else if (itemNameA > itemNameB) {
+            return 1;
+        }
+        return 0;
+    });
 };
 const loadData_itemLocations = (rows) => {
     const itemLocations = new Map();
@@ -85,6 +98,8 @@ const loadData = async (fileName, loadRemoteFile) => {
     try {
         Papa.parse(input, {
             delimiter: ",",
+            header: true,
+            skipEmptyLines: true,
             complete: async (results) => {
                 if (results.errors.length > 0) {
                     log(results.errors[0].message);
@@ -129,6 +144,32 @@ const refreshAll = async () => {
     await loadData("itemReuses.csv", true);
 };
 exports.refreshAll = refreshAll;
+const getItems = (searchStr) => {
+    const searchStrPieces = searchStr.toLowerCase().split(" ");
+    const resultItems = [];
+    for (const item of data_items_sorted) {
+        let includeItem = true;
+        const itemNameLowerCase = item.itemName.toLowerCase();
+        const shortDescriptionLowerCase = item.shortDescription.toLowerCase();
+        for (const searchStrPiece of searchStrPieces) {
+            if (!itemNameLowerCase.includes(searchStrPiece) &&
+                !item.searchTerms.includes(searchStrPiece) &&
+                !shortDescriptionLowerCase.includes(searchStrPiece)) {
+                includeItem = false;
+                break;
+            }
+        }
+        if (includeItem) {
+            resultItems.push({
+                itemKey: item.itemKey,
+                itemName: item.itemName,
+                itemImage: (item.itemImage || "")
+            });
+        }
+    }
+    return resultItems;
+};
+exports.getItems = getItems;
 const getItemByItemKey = (itemKey) => {
     return data_items_byItemKey.get(itemKey);
 };

@@ -47,8 +47,8 @@ const urlPrefix = configFns.getProperty("reverseProxy.urlPrefix");
 
 app.use(urlPrefix, express.static(path.join(__dirname, "public")));
 
-app.use(urlPrefix + "/bulma-webapp-js",
-  express.static(path.join(__dirname, "node_modules", "@cityssm", "bulma-webapp-js", "dist")));
+app.use(urlPrefix + "/lib/axios",
+  express.static(path.join(__dirname, "node_modules", "axios", "dist")));
 
 
 /*

@@ -3,3 +3,8 @@ export declare type DataFileName = "items.csv" | "locations.csv" | "itemLocation
 export declare type Item = {
     itemImage?: string;
 } & fileDefinitions.Item;
+export interface ItemSearchResult {
+    itemKey: string;
+    itemName: string;
+    itemImage: string;
+}

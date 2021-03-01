@@ -1,0 +1,135 @@
+<%- include('_header'); -%>
+
+<nav class="has-text-right mb-4">
+  <a href="<%= urlPrefix %>/search">Search Again</a>
+</nav>
+
+<section class="block">
+  <% if (item.itemImage) { %>
+    <div class="columns">
+      <div class="column">
+  <% } %>
+  <h1 class="title is-3"><%= item.itemName %></h1>
+
+  <% if (item.shortDescription !== "") { %>
+  <p class="has-text-weight-bold"><%= item.shortDescription %></p>
+  <% } %>
+
+  <% if (item.longDescription !== "") { %>
+  <p><%= item.longDescription %></p>
+  <% } %>
+
+  <% if (item.itemImage) { %>
+      </div>
+      <div class="column is-one-quarter">
+        <figure class="image is-1by1">
+          <img src="<%= urlPrefix %>/images-items/<%= item.itemImage %>" alt="<%= item.itemName %>" />
+        </figure>
+      </div>
+    </div>
+  <% } %>
+</section>
+
+<section class="block">
+  <h2 class="title is-4">
+    Reuse Ideas
+    <span class="tag is-info is-medium"><%= itemReuses.length %></span>
+  </h2>
+
+  <% if (itemReuses.length > 0) { %>
+
+  <% } %>
+
+  <div class="message is-info">
+    <div class="message-body">
+      Have a reuse idea to share?
+    </div>
+  </div>
+</section>
+
+<section class="block">
+  <h2 class="title is-4">
+    Recycle and Disposal Locations
+    <span class="tag is-info is-medium"><%= itemLocations.length %></span>
+  </h2>
+
+  <% if (itemLocations.length > 0) { %>
+    <div class="panel">
+      <% for (const location of itemLocations) { %>
+        <div class="panel-block is-block">
+          <h3 class="title is-5 mb-2"><%= location.locationName %></h3>
+          <div class="field is-grouped is-grouped-multiline">
+            <% if (location.address !== "") { %>
+              <div class="control">
+                <div class="tags has-addons" title="Location">
+                  <span class="tag is-dark">
+                    <i class="fas fa-map-marker-alt" aria-hidden="true"></i>
+                  </span>
+                  <span class="tag is-success is-light"><%= location.address %></span>
+                </div>
+              </div>
+            <% } %>
+            <% if (location.phoneNumber !== "") { %>
+              <div class="control">
+                <div class="tags has-addons" title="Phone Number">
+                  <span class="tag is-dark">
+                    <i class="fas fa-phone" aria-hidden="true"></i>
+                  </span>
+                  <span class="tag is-info is-light"><%= location.phoneNumber %></span>
+                </div>
+              </div>
+            <% } %>
+            <% if (location.websiteURL !== "") { %>
+              <div class="control">
+                <a class="tags has-addons" href="<%= location.websiteURL %>" target="_blank" rel="nofollow noreferrer">
+                  <span class="tag is-dark">
+                    <i class="fas fa-globe-americas" aria-hidden="true"></i>
+                  </span>
+                  <span class="tag is-link is-light">Visit Website</span>
+                </a>
+              </div>
+            <% } %>
+          </div>
+          <p><%= location.shortDescription %></p>
+          <% if (location.longDescription !== "") { %>
+            <p><%= location.longDescription %></p>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  <% } %>
+
+  <div class="message is-info">
+    <div class="message-body">
+      Know of another location?
+      Share it.
+    </div>
+  </div>
+</section>
+
+<% if (relatedItems.length > 0) { %>
+  <section class="block">
+    <h2 class="title is-4">Related Items</h2>
+    <div class="columns is-mobile is-multiline">
+      <% for (const relatedItem of relatedItems) { %>
+        <div class="column is-one-quarter-desktop is-one-third-tablet is-half-mobile">
+          <a href="<%= urlPrefix %>/item/<%= relatedItem.itemKey %>">
+            <div class="card">
+              <div class="card-image">
+                <figure class="image is-1by1">
+                  <img src="<%= urlPrefix %>/images-items/<%= (relatedItem.itemImage || "recycling.png") %>"
+                </figure>
+              </div>
+              <div class="card-content">
+                <p class="title is-5"><%= relatedItem.itemName %></p>
+              </div>
+            </div>
+          </a>
+        </div>
+      <% } %>
+    </div>
+  </section>
+<% } %>
+
+<%- include('_footerA'); -%>
+<%- include('_footerB'); -%>

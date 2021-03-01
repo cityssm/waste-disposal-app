@@ -13,8 +13,9 @@ const log = debug("waste-disposal-app:itemDataCache");
 
 const itemImages = configFns.getProperty("itemImages");
 
-
+let data_items_sorted: recordTypes.Item[] = [];
 let data_items_byItemKey: Map<string, recordTypes.Item> = new Map();
+
 let data_itemLocations_byItemKey: Map<string, string[]> = new Map();
 let data_relatedItems_byItemKey: Map<string, string[]> = new Map();
 let data_itemReuses_byItemKey: Map<string, fileDefinitions.ItemReuse[]> = new Map();
@@ -31,10 +32,26 @@ const loadData_items = (rows: recordTypes.Item[]) => {
       row.itemImage = itemImages[row.itemKey];
     }
 
+    row.searchTerms = (row.searchTerms || "").toLowerCase();
+
     items.set(row.itemKey, row);
   }
 
   data_items_byItemKey = items;
+
+  data_items_sorted = rows.sort((itemA, itemB) => {
+
+    const itemNameA = itemA.itemName.toLowerCase();
+    const itemNameB = itemB.itemName.toLowerCase();
+
+    if (itemNameA < itemNameB) {
+      return -1;
+    } else if (itemNameA > itemNameB) {
+      return 1;
+    }
+
+    return 0;
+  });
 };
 
 
@@ -125,6 +142,8 @@ const loadData = async (fileName: recordTypes.DataFileName, loadRemoteFile: bool
   try {
     Papa.parse(input, {
       delimiter: ",",
+      header: true,
+      skipEmptyLines: true,
       complete: async (results) => {
 
         if (results.errors.length > 0) {
@@ -184,6 +203,43 @@ export const refreshAll = async () => {
  * Get Functions
  */
 
+
+export const getItems = (searchStr: string): recordTypes.ItemSearchResult[] => {
+
+  const searchStrPieces = searchStr.toLowerCase().split(" ");
+
+  const resultItems: recordTypes.ItemSearchResult[] = [];
+
+  for (const item of data_items_sorted) {
+
+    let includeItem = true;
+
+    const itemNameLowerCase = item.itemName.toLowerCase();
+    const shortDescriptionLowerCase = item.shortDescription.toLowerCase();
+
+    for (const searchStrPiece of searchStrPieces) {
+
+      if (!itemNameLowerCase.includes(searchStrPiece) &&
+       !item.searchTerms.includes(searchStrPiece) &&
+       !shortDescriptionLowerCase.includes(searchStrPiece)
+     ) {
+        includeItem = false;
+        break;
+      }
+    }
+
+    if (includeItem) {
+
+      resultItems.push({
+        itemKey: item.itemKey,
+        itemName: item.itemName,
+        itemImage: (item.itemImage || "")
+      });
+    }
+  }
+
+  return resultItems;
+};
 
 export const getItemByItemKey = (itemKey: string) => {
   return data_items_byItemKey.get(itemKey);
