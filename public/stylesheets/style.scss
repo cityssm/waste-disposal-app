@@ -2,3 +2,7 @@ $family-sans-serif: 'Barlow', system-ui, sans-serif;
 $body-size: 18px;
 
 @import '@cityssm/bulma-a11y/bulma-a11y';
+
+main {
+  min-height: calc(100vh - 160px);
+}

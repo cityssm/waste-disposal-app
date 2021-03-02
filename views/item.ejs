@@ -37,7 +37,26 @@
   </h2>
 
   <% if (itemReuses.length > 0) { %>
-
+    <div class="panel">
+      <% for (const reuse of itemReuses) { %>
+        <div class="panel-block is-block has-background-white">
+          <h3 class="title is-5 mb-2"><%= reuse.reuseName %></h3>
+          <% if (reuse.websiteURL !== "") { %>
+            <div class="field is-grouped is-grouped-multiline">
+              <div class="control">
+                <a class="tags has-addons" href="<%= reuse.websiteURL %>" target="_blank" rel="nofollow noreferrer">
+                  <span class="tag is-dark">
+                    <i class="fas fa-globe-americas" aria-hidden="true"></i>
+                  </span>
+                  <span class="tag is-link is-light">Visit Website</span>
+                </a>
+              </div>
+            </div>
+          <% } %>
+          <p><%= reuse.reuseDescription %></p>
+        </div>
+      <% } %>
+    </div>
   <% } %>
 
   <div class="message is-info">
@@ -56,7 +75,7 @@
   <% if (itemLocations.length > 0) { %>
     <div class="panel">
       <% for (const location of itemLocations) { %>
-        <div class="panel-block is-block">
+        <div class="panel-block is-block has-background-white">
           <h3 class="title is-5 mb-2"><%= location.locationName %></h3>
           <div class="field is-grouped is-grouped-multiline">
             <% if (location.address !== "") { %>
