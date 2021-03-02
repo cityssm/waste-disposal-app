@@ -5,6 +5,7 @@ export const itemImages: configTypes.Config_ItemImages = {
   "APPLIANCES-LARGE": "washing-machine.jpg",
   "APPLIANCES-SMALL": "toaster.jpg",
 
+  "BAGS-LOCKCITY": "bags-lockcity.jpg",
   BARBECUES: "barbecue.jpg",
   "BATTERIES-LARGE": "batteries-large.jpg",
   "BATTERIES-SMALL": "batteries.jpg",

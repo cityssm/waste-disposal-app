@@ -41,7 +41,7 @@ import type * as axiosType from "axios/index";
    * Search functions
    */
 
-  const urlPrefix = document.getElementsByTagName("main")[0].getAttribute("data-url-prefix");
+  const urlPrefix = escapeHtml(document.getElementsByTagName("main")[0].getAttribute("data-url-prefix"));
 
   const searchStrEle = document.getElementById("filters--searchStr") as HTMLInputElement;
   const searchResultsEle = document.getElementById("container--searchResults") as HTMLDivElement;

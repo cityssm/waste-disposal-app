@@ -4,6 +4,7 @@ exports.itemImages = void 0;
 exports.itemImages = {
     "APPLIANCES-LARGE": "washing-machine.jpg",
     "APPLIANCES-SMALL": "toaster.jpg",
+    "BAGS-LOCKCITY": "bags-lockcity.jpg",
     BARBECUES: "barbecue.jpg",
     "BATTERIES-LARGE": "batteries-large.jpg",
     "BATTERIES-SMALL": "batteries.jpg",

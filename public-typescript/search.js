@@ -25,7 +25,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;");
     };
-    var urlPrefix = document.getElementsByTagName("main")[0].getAttribute("data-url-prefix");
+    var urlPrefix = escapeHtml(document.getElementsByTagName("main")[0].getAttribute("data-url-prefix"));
     var searchStrEle = document.getElementById("filters--searchStr");
     var searchResultsEle = document.getElementById("container--searchResults");
     var renderItemColumnEle = function (item) {
